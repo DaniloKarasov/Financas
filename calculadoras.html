@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calculadoras — Ceilândia no Positivo</title>
+  <meta name="description" content="Calculadoras financeiras: orçamento mensal, economia/objetivos e proporção de gastos — ferramentas gratuitas e acessíveis." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/calculadoras.css">
+</head>
+<body>
+  <!-- ===== Header / Navigation ===== -->
+  <header>
+  <div class="container header-inner">
+    <div class="brand">
+      <h1 class="site-title">Ceilândia no Positivo</h1>
+      <p class="site-tag">Educação financeira para todos</p>
+    </div>
+    <nav>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="index.html">Início</a></li>
+        <li class="nav-item"><a href="beneficios.html">Benefícios Sociais</a></li>
+        <li class="nav-item"><a href="calculadoras.html">Calculadoras</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+  <main class="calc-container" role="main">
+    <section class="grid" aria-label="Área principal das calculadoras">
+
+      <!-- Left column: calculators -->
+      <div>
+        <!-- Intro card -->
+        <div class="card" aria-labelledby="title-calculadoras">
+          <h2 id="title-calculadoras">Calculadoras Financeiras</h2>
+          <p class="small muted">Use estas ferramentas para transformar suas anotações em números que fazem sentido. Os cálculos acontecem no seu navegador — nada é salvo no site.</p>
+        </div>
+
+        <!-- Budget calculator -->
+        <section id="budget-card" class="card" aria-labelledby="budget-title" style="margin-top:1rem">
+          <h3 id="budget-title">Calculadora de Orçamento Mensal</h3>
+          <p class="small muted">Insira sua renda e registre despesas fixas e variáveis. Você pode adicionar linhas conforme precisar.</p>
+
+          <div class="stack">
+            <div>
+              <label for="income">Renda total prevista no mês (R$)</label>
+              <input id="income" type="number" min="0" step="0.01" placeholder="Ex: 1800" aria-label="Renda total">
+            </div>
+
+            <div>
+              <label>Despesas fixas (ex.: aluguel, luz, internet)</label>
+              <table class="expenses-table" id="fixed-table" aria-describedby="fixed-desc">
+                <thead>
+                  <tr><th>Descrição</th><th style="width:120px">Valor (R$)</th><th style="width:80px">Ação</th></tr>
+                </thead>
+                <tbody id="fixed-tbody">
+                  <!-- template row will be inserted by JS -->
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="3">
+                      <button id="add-fixed" class="btn-ghost" type="button">+ Adicionar despesa fixa</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+              <div id="fixed-desc" class="small muted">Despesas que se repetem todos os meses.</div>
+            </div>
+
+            <div>
+              <label>Despesas variáveis (ex.: mercado, transporte)</label>
+              <table class="expenses-table" id="var-table" aria-describedby="var-desc">
+                <thead>
+                  <tr><th>Descrição</th><th style="width:120px">Valor (R$)</th><th style="width:80px">Ação</th></tr>
+                </thead>
+                <tbody id="var-tbody">
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="3">
+                      <button id="add-var" class="btn-ghost" type="button">+ Adicionar despesa variável</button>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+              <div id="var-desc" class="small muted">Despesas que variam por mês; registre sua previsão.</div>
+            </div>
+
+            <div class="result-block" aria-live="polite" id="budget-results" style="margin-top:.6rem">
+              <div><span class="small muted">Total de despesas:</span> <span id="total-exp" class="result-value">R$ 0,00</span></div>
+              <div><span class="small muted">Saldo (renda - despesas):</span> <span id="balance" class="result-value">R$ 0,00</span></div>
+              <div id="percentages" class="small muted"></div>
+              <div id="budget-suggestion" class="small muted"></div>
+            </div>
+
+            <div class="btn-row">
+              <button id="calc-budget" class="btn-primary" type="button">Calcular Orçamento</button>
+              <button id="reset-budget" class="btn-ghost" type="button">Redefinir</button>
+              <button id="export-budget" class="btn-ghost" type="button">Baixar CSV</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Goals calculator -->
+        <section id="goals-card" class="card" aria-labelledby="goals-title" style="margin-top:1rem">
+          <h3 id="goals-title">Calculadora de Economia / Objetivos</h3>
+          <p class="small muted">Defina um objetivo e um prazo — a calculadora mostra quanto poupar por mês, semana e dia.</p>
+
+          <div class="stack">
+            <div class="form-row">
+              <div style="flex:1">
+                <label for="goal-total">Valor objetivo (R$)</label>
+                <input id="goal-total" type="number" min="0" step="0.01" placeholder="Ex: 600">
+              </div>
+              <div style="width:120px">
+                <label for="goal-months">Prazo (meses)</label>
+                <input id="goal-months" type="number" min="1" step="1" placeholder="3">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div style="flex:1">
+                <label for="goal-current">Valor já disponível (R$)</label>
+                <input id="goal-current" type="number" min="0" step="0.01" placeholder="Ex: 50">
+              </div>
+              <div style="width:160px">
+                <label for="goal-frequency">Considerar dias no mês</label>
+                <select id="goal-frequency">
+                  <option value="30">30 dias</option>
+                  <option value="28">28 dias</option>
+                  <option value="31">31 dias</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="result-block" id="goal-results" aria-live="polite">
+              <div><span class="small muted">Faltam:</span> <span id="goal-remaining" class="result-value">R$ 0,00</span></div>
+              <div><span class="small muted">Salvar por mês:</span> <span id="save-per-month" class="result-value">R$ 0,00</span></div>
+              <div><span class="small muted">Salvar por semana:</span> <span id="save-per-week" class="result-value">R$ 0,00</span></div>
+              <div><span class="small muted">Salvar por dia:</span> <span id="save-per-day" class="result-value">R$ 0,00</span></div>
+            </div>
+
+            <div class="btn-row">
+              <button id="calc-goal" class="btn-primary" type="button">Calcular Meta</button>
+              <button id="reset-goal" class="btn-ghost" type="button">Redefinir</button>
+              <button id="export-goal" class="btn-ghost" type="button">Baixar CSV</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Proportion calculator -->
+        <section id="prop-card" class="card" aria-labelledby="prop-title" style="margin-top:1rem;margin-bottom:1.4rem">
+          <h3 id="prop-title">Calculadora de Proporção de Gastos</h3>
+          <p class="small muted">Veja quanto a sua renda é consumida por cada categoria e visualize com barras.</p>
+
+          <div class="stack">
+            <div>
+              <label for="prop-income">Renda total (R$)</label>
+              <input id="prop-income" type="number" min="0" step="0.01" placeholder="Ex: 1800">
+            </div>
+
+            <div>
+              <label>Categorias (adicione até 12)</label>
+              <table class="expenses-table" id="prop-table" aria-describedby="prop-desc">
+                <thead><tr><th>Categoria</th><th style="width:120px">Valor (R$)</th><th style="width:80px">Ação</th></tr></thead>
+                <tbody id="prop-tbody"></tbody>
+                <tfoot>
+                  <tr><td colspan="3"><button id="add-prop" class="btn-ghost" type="button">+ Adicionar categoria</button></td></tr>
+                </tfoot>
+              </table>
+              <div id="prop-desc" class="small muted">Use categorias como Moradia, Alimentação, Transporte, Saúde, Poupança, Lazer etc.</div>
+            </div>
+
+            <div id="prop-results" class="result-block" aria-live="polite">
+              <div class="small muted">Proporção de gastos (porcentagem e barras)</div>
+              <div id="bars" class="bars" style="margin-top:.5rem"></div>
+              <div id="prop-summary" class="small muted"></div>
+            </div>
+
+            <div class="btn-row">
+              <button id="calc-prop" class="btn-primary" type="button">Calcular Proporções</button>
+              <button id="reset-prop" class="btn-ghost" type="button">Redefinir</button>
+              <button id="export-prop" class="btn-ghost" type="button">Baixar CSV</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right column: ajuda rápida e segurança -->
+      <aside class="card" aria-labelledby="help-title" style="height:100%">
+        <h3 id="help-title">Ajuda rápida</h3>
+        <p class="small muted">Dicas curtas para usar as calculadoras corretamente.</p>
+        <ul class="small muted">
+          <li>Insira valores em reais sem símbolos (ex.: 1200.50)</li>
+          <li>Use previsões médias se sua renda varia muito</li>
+          <li>Reveja resultados e faça ajustes realistas</li>
+        </ul>
+
+        <div style="margin-top:1rem" class="muted-block">
+          <h4 style="margin:.2rem 0">Privacidade</h4>
+          <p class="small muted">Os cálculos são feitos localmente no seu navegador. <strong>Nenhum dado é enviado ao servidor</strong> ou compartilhado com terceiros. Você pode baixar resultados em CSV para seu controle.</p>
+        </div>
+
+        <div style="margin-top:1rem">
+          <h4 style="margin:.2rem 0">Exportar / salvar</h4>
+          <p class="small muted">Use os botões "Baixar CSV" nas calculadoras para guardar uma cópia no seu celular ou computador.</p>
+        </div>
+
+        <div style="margin-top:1rem">
+          <h4 style="margin:.2rem 0">Precisa de ajuda?</h4>
+          <p class="small muted">Procure atendimento no CRAS local para apoio documental e orientação presencial.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ===== Footer / Contatos ===== -->
+    <footer id="footer" class="footer container" role="contentinfo">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <h3>Ceilândia no Positivo</h3>
+          <p>Projeto de extensão — educação financeira comunitária. Conteúdo de caráter informativo e educativo.</p>
+        </div>
+
+        <div class="footer-contacts">
+          <h4>Contato</h4>
+          <p>Email: <a href="mailto:contato@daniloprofissional.com.br">contato@daniloprofissional.com.br</a></p>
+          <p>Site do desenvolvedor: <a href="https://daniloprofissional.com.br" target="_blank" rel="noopener">daniloprofissional.com.br</a></p>
+        </div>
+
+        <div class="footer-credits">
+          <p>&copy; 2025 Ceilândia no Positivo. Desenvolvido por Danilo Queiroz.</p>
+        </div>
+      </div>
+
+      <div class="footer-legal">
+        <p>Observações: este site fornece orientações gerais. Para tratamento de benefícios e questões legais, procure os órgãos competentes.</p>
+      </div>
+    </footer>
+
+<script src="js/calculadoras.js"></script>
+
+</body>
+</html>
